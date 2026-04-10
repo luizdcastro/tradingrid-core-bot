@@ -18,12 +18,12 @@ const botSchema = new mongoose.Schema(
             type: Boolean,
         },
         growth: {
-            type: Number,
-            default: 0
+            type: [Number],
+            default: []
         },
         profit: {
-            type: Number,
-            default: 0
+            type: [Number],
+            default: []
         },
         settings: {
             type: Object,

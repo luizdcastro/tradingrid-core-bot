@@ -1,6 +1,5 @@
 const conditionLogic = (data) => {
-    list = []
-    result = null
+    const list = []
 
     for (const [i, item] of data.entries()) {
         const next = i + 1

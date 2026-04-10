@@ -58,11 +58,12 @@ const processBots = async () => {
             }
         }
 
-        openDemo(open_demo, indicators)
-        openCcxt(open_ccxt, indicators)
-
-        closeDemo(close_demo, indicators)
-        closeCcxt(close_ccxt, indicators)
+        await Promise.all([
+            openDemo(open_demo, indicators),
+            openCcxt(open_ccxt, indicators),
+            closeDemo(close_demo, indicators),
+            closeCcxt(close_ccxt, indicators),
+        ])
 
     } catch (err) {
         console.log(err)

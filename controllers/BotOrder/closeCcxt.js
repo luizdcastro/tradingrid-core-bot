@@ -6,15 +6,11 @@ const Exchange = require('../../models/exchangeModel')
 const ccxt = require('ccxt')
 
 async function checkStopLoss(bot, indicator, order) {
-    let stopLoss
-    if (!!bot.settings.stopLoss) {
-        const percent = Number(order.buy_price) - (Number(bot.settings.stopLoss) / 100) * Number(order.buy_price)
-        const result = Number(indicator.interval["3m"].current.candle.close) <= percent
-        stopLoss = result
-    } else {
-        stopLoss = false
-    }
-    return stopLoss
+    if (!bot.settings.stopLoss) return false
+    const timeframe = bot.settings.timeframe
+    const threshold = Number(order.buy_price) - (Number(bot.settings.stopLoss) / 100) * Number(order.buy_price)
+    const currentClose = Number(indicator.interval[timeframe].current.candle.close)
+    return currentClose <= threshold
 }
 
 async function ccxtCloseOrder(bots, indicator) {

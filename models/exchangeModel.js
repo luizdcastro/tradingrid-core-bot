@@ -18,7 +18,10 @@ const exchangeSchema = new mongoose.Schema(
             type: String,
             ref: 'users',
             required: true
-        },    
+        },
+        passphrase: {
+            type: String,
+        },
     },
     {
         toJSON: {
