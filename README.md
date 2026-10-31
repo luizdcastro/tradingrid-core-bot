@@ -1,4 +1,4 @@
-# TradingGrid Core Bot
+# Tradingrid Core Bot
 
 Automated cryptocurrency trading bot engine. Evaluates configurable technical indicator conditions on a cron schedule and opens or closes positions on connected exchanges via [CCXT](https://github.com/ccxt/ccxt).
 
@@ -51,7 +51,7 @@ Indicator data is expected to be pre-populated in MongoDB by a separate data-fee
 ## Project Structure
 
 ```
-tradingrid_core_bot/
+tradingrid-core-bot/
 ├── controllers/
 │   ├── BotLogic/
 │   │   ├── evaluateLogic.js   Shared indicator evaluation (replaces ~1800 lines of duplication)
