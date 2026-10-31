@@ -98,13 +98,15 @@ Create a `config.env` file in the project root:
 
 ```env
 DB_CONNECT=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>
+EXCHANGE_SECRET_KEY=<64 hex characters>
 PORT=8001
 ```
 
-| Variable     | Required | Description                              |
-|--------------|----------|------------------------------------------|
-| `DB_CONNECT` | Yes      | MongoDB connection URI                   |
-| `PORT`       | No       | HTTP server port (default: `8001`)       |
+| Variable              | Required | Description                                                                 |
+|-----------------------|----------|-----------------------------------------------------------------------------|
+| `DB_CONNECT`          | Yes      | MongoDB connection URI                                                      |
+| `EXCHANGE_SECRET_KEY` | Yes      | Decrypts exchange credentials. Same value as in tradingrid-api (`openssl rand -hex 32`) |
+| `PORT`                | No       | HTTP server port (default: `8001`)                                          |
 
 ---
 
@@ -161,15 +163,15 @@ Tracks individual trades opened and closed by bots.
 
 ### Exchange
 
-Stores API credentials for exchange connections.
+Stores API credentials for exchange connections, encrypted with AES-256-GCM (`utils/secrets.js`). The bot decrypts them only when it places an order; values saved before encryption are read as they are.
 
 | Field        | Type   | Required | Description                      |
 |--------------|--------|----------|----------------------------------|
 | `exchange`   | String | Yes      | CCXT exchange ID (e.g. `"binance"`) |
-| `api_key`    | String | Yes      | Exchange API key                 |
-| `secret_key` | String | Yes      | Exchange API secret              |
+| `api_key`    | String | Yes      | Exchange API key, encrypted      |
+| `secret_key` | String | Yes      | Exchange API secret, encrypted   |
 | `user`       | String | Yes      | Owner user ID                    |
-| `passphrase` | String | No       | Required by some exchanges (e.g. KuCoin) |
+| `passphrase` | String | No       | Required by some exchanges (e.g. KuCoin), encrypted |
 
 ---
 
