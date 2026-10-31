@@ -4,6 +4,7 @@ const Bot = require('../../models/botModel')
 const User = require('../../models/userModel')
 const Exchange = require('../../models/exchangeModel')
 const ccxt = require('ccxt')
+const { decrypt } = require('../../utils/secrets')
 
 async function checkStopLoss(bot, indicator, order) {
     if (!bot.settings.stopLoss) return false
@@ -48,20 +49,20 @@ async function ccxtCloseOrder(bots, indicator) {
     for (const exchange of exchanges) {
         exchange_secrets.push({
             id: exchange._id,
-            api_key: exchange.api_key,
-            secret_key: exchange.secret_key,
+            api_key: decrypt(exchange.api_key),
+            secret_key: decrypt(exchange.secret_key),
             user: exchange.user,
             name: exchange.exchange,
-            passphrase: exchange.passphrase
+            passphrase: decrypt(exchange.passphrase)
         })
     }
 
     for (const item of close_ccxt) {
 
-        const exchange_decrypted = exchange_secrets.find(element => element.id == item.bot.settings.exchange.id)
+        const credentials = exchange_secrets.find(element => element.id == item.bot.settings.exchange.id)
 
-        const exchangeClient = new ccxt[exchange_decrypted.name]({
-            apiKey: exchange_decrypted.api_key, secret: exchange_decrypted.secret_key, password: exchange_decrypted.passphrase
+        const exchangeClient = new ccxt[credentials.name]({
+            apiKey: credentials.api_key, secret: credentials.secret_key, password: credentials.passphrase
         })
 
         const symbol = `${item.bot.settings.ticker.slice(0, -4)}/${item.bot.settings.ticker.slice(-4)}`
